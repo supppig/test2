@@ -20,12 +20,12 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: 测试
-          release_name: 测试2
+          tag_name: tag-${{ steps.var.outputs.da }}
+          release_name: release-${{ steps.var.outputs.da }}
           draft: false
           prerelease: false
           body: |
-            ${{ steps.var.outputs.bdurl }}
+            百度网址: ${{ steps.var.outputs.bdurl }}
           
       - name: 上传Release附件1
         uses: actions/upload-release-asset@v1
