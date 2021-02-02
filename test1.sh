@@ -4,7 +4,7 @@ output() {
     echo 'AA[set-output name='$1';]'$(eval 'echo ${'$1'}')
 }
 
-da=$(date)
+da=$(date '+%Y%m%d-%H%M%S')
 
 bdurl=https://www.baidu.com
 output bdurl
