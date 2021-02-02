@@ -11,15 +11,21 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+
+      - name: 变量
+        id: var
+        run: sh test1.sh
         
       - name: 创建Release        
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: $(date)
-          release_name: 测试1
+          tag_name: 测试
+          release_name: 测试2
           draft: false
           prerelease: false
+          body: |
+            ${{ steps.var.bdurl }}
           
       - name: 上传Release附件1
         uses: actions/upload-release-asset@v1
