@@ -16,7 +16,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: test-only
+          tag_name: $(date)
           release_name: 测试1
           draft: false
           prerelease: false
