@@ -1,8 +1,8 @@
 output() {
     echo 123456
-    echo '##[set-output name='$1';]'$2
-    echo 'AA[set-output name='$1';]'$2
+    echo '##[set-output name='$1';]'$(eval 'echo ${'$1'}')
+    echo 'AA[set-output name='$1';]'$(eval 'echo ${'$1'}')
 }
 
 bdurl=https://www.baidu.com
-output bdurl $bdurl
+output bdurl
