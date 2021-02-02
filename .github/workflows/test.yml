@@ -2,16 +2,49 @@
 name: CI
 on:
   workflow_dispatch:
+env:
+  TZ: Asia/Shanghai
+  GITHUB_TOKEN: ${{ secrets.sec_token }}
+  
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
         
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: 创建Release        
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: test-only
+          release_name: 测试1
+          draft: false
+          prerelease: false
+          
+      - name: 上传Release附件1
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ddd/1.jpg
+          asset_name: 1.jpg
+          asset_content_type: image/jpeg
 
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: 上传Release附件2
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ddd/2.txt
+          asset_name: 2.txt
+          asset_content_type: text/plain
+
+      - name: 上传Release附件3
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ddd/3.zip
+          asset_name: 3.zip
+          asset_content_type: application/zip
+          
