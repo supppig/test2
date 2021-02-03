@@ -9,25 +9,30 @@ env:
   GITHUB_TOKEN: ${{ secrets.sec_token }}
 
 jobs:
-  build:
-    runs-on: ubuntu-18.04
+  run:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    - run: |
+        set -x
+        assets=()
+        for asset in ./*.md; do
+          assets+=("-a" "$asset")
+        done
+        tag_name="${GITHUB_REF##*/}"
+        hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
 
-      - name: 变量
-        id: var
-        run: sh test1.sh
 
-      - name: ttt
-        uses: actions/checkout@v2
-        run: |
-          set -x
-          assets=()
-          for asset in ./*.md; do
-            assets+=("-a" "$asset")
-          done
-          tag_name="${GITHUB_REF##*/}"
-          hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+# jobs:
+#   build:
+#     runs-on: ubuntu-18.04
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: 变量
+#         id: var
+#         run: sh test1.sh
+
 
       # - name: Create Release
       #   uses: actions/github-script@v2
