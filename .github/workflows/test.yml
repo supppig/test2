@@ -21,7 +21,8 @@ jobs:
         # done
         # tag_name="abcdef"
         # # hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
-        hub release create -a ./ddd/1.jpg -a ./ddd/2.txt -a ./ddd/3.zip -m "this is message" test12345
+        da=$(date '+%Y%m%d-%H%M%S')
+        hub release create -a ./ddd/1.jpg -a ./ddd/2.txt -a ./ddd/3.zip -F ./d.txt -m "$da" "$da"
 
 
 # jobs:
