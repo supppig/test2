@@ -20,7 +20,8 @@ jobs:
           assets+=("-a" "$asset")
         done
         tag_name="abcdef"
-        hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+        hub release create "${assets[@]}" "$tag_name"
+        hub release --help
 
 
 # jobs:
