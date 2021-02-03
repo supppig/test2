@@ -19,7 +19,7 @@ jobs:
         for asset in ./*.md; do
           assets+=("-a" "$asset")
         done
-        tag_name="${GITHUB_REF##*/}"
+        tag_name="abcdef"
         hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
 
 
