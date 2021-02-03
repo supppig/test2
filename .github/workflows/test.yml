@@ -31,9 +31,10 @@ jobs:
 
             const release = await github.repos.createRelease({
               owner, repo,
-              tag_name: process.env.GITHUB_REF,
-              draft: true,
-              target_commitish: sha
+              tag_name: tag-${{ steps.var.outputs.da }},
+              release_name: release-${{ steps.var.outputs.da }},
+              draft: false,
+              prerelease: false
             });
 
             console.log('created release', { release });
