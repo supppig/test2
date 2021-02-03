@@ -1,12 +1,13 @@
-
 name: CI
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
 env:
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.sec_token }}
-  
+
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -16,8 +17,8 @@ jobs:
       - name: 变量
         id: var
         run: sh test1.sh
-        
-      - name: 创建Release        
+
+      - name: 创建Release
         id: create_release
         uses: actions/create-release@v1
         with:
@@ -27,7 +28,7 @@ jobs:
           prerelease: false
           body: |
             百度网址: ${{ steps.var.outputs.bdurl }}
-          
+
       - name: 上传Release附件1
         uses: actions/upload-release-asset@v1
         with:
@@ -51,4 +52,3 @@ jobs:
           asset_path: ./ddd/3.zip
           asset_name: 3.zip
           asset_content_type: application/zip
-
