@@ -9,4 +9,10 @@ da=$(date '+%Y%m%d-%H%M%S')
 echo $da >x.txt
 echo >>x.txt
 echo "baidu https://www.baidu.com" >>x.txt
-hub release create -a ./ddd/1.jpg -a ./ddd/2.txt -a ./ddd/3.zip -F x.txt "$da"
+# hub release create -a ./ddd/1.jpg -a ./ddd/2.txt -a ./ddd/3.zip -F x.txt "$da"
+
+assets=()
+for asset in ./ddd/*; do
+  assets+=("-a" "$asset")
+done
+hub release create ${assets[@]} -F x.txt "$da"
