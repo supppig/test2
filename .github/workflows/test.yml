@@ -18,38 +18,50 @@ jobs:
         id: var
         run: sh test1.sh
 
-      - name: Create Release
-        uses: actions/github-script@v2
-        with:
-          script: |
-            console.log('environment', process.versions);
-            
-            const fs = require('fs').promises;
-            
-            const { repo: { owner, repo }, sha } = context;
-            console.log({ owner, repo, sha });
+      - name: ttt
+        uses: actions/checkout@v2
+        run: |
+          set -x
+          assets=()
+          for asset in ./*.md; do
+            assets+=("-a" "$asset")
+          done
+          tag_name="${GITHUB_REF##*/}"
+          hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
 
-            const release = await github.repos.createRelease({
-              owner, repo,
-              tag_name: tag-${{ steps.var.outputs.da }},
-              release_name: release-${{ steps.var.outputs.da }},
-              draft: false,
-              prerelease: false
-            });
+      # - name: Create Release
+      #   uses: actions/github-script@v2
+      #   with:
+      #     mytag: ${{ steps.var.outputs.da }}
+      #     script: |
+      #       console.log('environment', process.versions);
+            
+      #       const fs = require('fs').promises;
+            
+      #       // const { repo: { owner, repo }, sha } = context;
+      #       console.log({ owner, repo, sha });
 
-            console.log('created release', { release });
+      #       const release = await github.repos.createRelease({
+      #         owner, repo,
+      #         tag_name: aaa,
+      #         release_name: bb,
+      #         draft: false,
+      #         prerelease: false
+      #       });
+
+      #       console.log('created release', { release });
         
-            for (let file of await fs.readdir('./ddd/')) {
-              // do whatever filtering you want here, I'm just uploading all the files
-              console.log('uploading', file);
+      #       for (let file of await fs.readdir('./ddd/')) {
+      #         // do whatever filtering you want here, I'm just uploading all the files
+      #         console.log('uploading', file);
 
-              await github.repos.uploadReleaseAsset({
-                owner, repo,
-                release_id: release.data.id,
-                name: file,
-                data: await fs.readFile(`./ddd/${file}`)
-              });            
-            }
+      #         await github.repos.uploadReleaseAsset({
+      #           owner, repo,
+      #           release_id: release.data.id,
+      #           name: file,
+      #           data: await fs.readFile(`./ddd/${file}`)
+      #         });            
+      #       }
 
       # - name: 创建Release
       #   id: create_release
