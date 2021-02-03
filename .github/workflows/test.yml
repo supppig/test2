@@ -18,26 +18,48 @@ jobs:
         id: var
         run: sh test1.sh
 
-      - name: 创建Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create Release
+        uses: actions/github-script@v2
         with:
-          tag_name: tag-${{ steps.var.outputs.da }}
-          release_name: release-${{ steps.var.outputs.da }}
-          draft: false
-          prerelease: false
-          body: |
-            百度网址: ${{ steps.var.outputs.bdurl }}
+          script: |
+            console.log('environment', process.versions);
+            
+            const fs = require('fs').promises;
+            
+            const { repo: { owner, repo }, sha } = context;
+            console.log({ owner, repo, sha });
 
-      - name: 上传Release附件
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: |
-            ./ddd/1.jpg
-            ./ddd/2.txt
-            ./ddd/3.zip
+            const release = await github.repos.createRelease({
+              owner, repo,
+              tag_name: process.env.GITHUB_REF,
+              draft: true,
+              target_commitish: sha
+            });
 
+            console.log('created release', { release });
+        
+            for (let file of await fs.readdir('./ddd/')) {
+              // do whatever filtering you want here, I'm just uploading all the files
+              console.log('uploading', file);
+
+              await github.repos.uploadReleaseAsset({
+                owner, repo,
+                release_id: release.data.id,
+                name: file,
+                data: await fs.readFile(`./${file}`)
+              });            
+            }
+
+      # - name: 创建Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   with:
+      #     tag_name: tag-${{ steps.var.outputs.da }}
+      #     release_name: release-${{ steps.var.outputs.da }}
+      #     draft: false
+      #     prerelease: false
+      #     body: |
+      #       百度网址: ${{ steps.var.outputs.bdurl }}
 
       # - name: 上传Release附件1
       #   uses: actions/upload-release-asset@v1
